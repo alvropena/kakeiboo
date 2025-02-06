@@ -36,6 +36,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "60641a02-8fb3-4afb-8e04-bf7b6841e663"
+      }
+    },
+    "owner": "alvropena"
   }
 }
