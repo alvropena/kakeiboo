@@ -3,10 +3,14 @@ import { supabase } from '@/lib/supabase';
 import { Session } from '@supabase/supabase-js';
 
 type UserProfile = {
+	id: string;
+	email: string;
 	name: string;
 	birthday: string;
 	gender: string;
 	currency: string;
+	created_at: string;
+	updated_at: string;
 };
 
 type ContextProps = {
@@ -30,9 +34,10 @@ const AuthProvider = (props: Props) => {
 
 	const fetchUserProfile = async (userId: string) => {
 		try {
+			console.log('📥 Fetching user profile for:', userId);
 			const { data, error } = await supabase
 				.from('users')
-				.select('name, birthday, gender, currency')
+				.select('*')
 				.eq('id', userId)
 				.single();
 
@@ -42,16 +47,24 @@ const AuthProvider = (props: Props) => {
 			}
 
 			if (data) {
+				console.log('✅ Profile data received:', data);
 				setUserProfile(data);
+			} else {
+				console.log('⚠️ No profile data found');
+				setUserProfile(null);
 			}
 		} catch (error) {
 			console.error('Error in fetchUserProfile:', error);
+			setUserProfile(null);
 		}
 	};
 
 	const refreshProfile = async () => {
 		if (session?.user.id) {
+			console.log('🔄 Refreshing user profile...');
 			await fetchUserProfile(session.user.id);
+		} else {
+			console.log('⚠️ Cannot refresh profile - no session');
 		}
 	};
 
@@ -60,7 +73,6 @@ const AuthProvider = (props: Props) => {
 		supabase.auth.getSession().then(({ data: { session } }) => {
 			console.log('🔐 Initial session check:', {
 				hasSession: !!session,
-				sessionData: session,
 				userId: session?.user?.id
 			});
 			setSession(session);

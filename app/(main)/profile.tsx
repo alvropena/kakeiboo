@@ -7,6 +7,7 @@ import { useThemeColor } from "@/constants/theme";
 import { useContext } from "react";
 import { AuthContext } from "@/provider/auth";
 import Header from "@/components/header";
+import ContinueButton from "@/components/continue-button";
 
 export default function Profile() {
   const colorScheme = useColorScheme();
@@ -59,6 +60,10 @@ export default function Profile() {
       fontSize: 16,
       color: useThemeColor(scheme, "text"),
     },
+    bottomContainer: {
+      paddingHorizontal: 20,
+      paddingBottom: 20,
+    },
   });
 
   if (!userProfile) {
@@ -103,6 +108,17 @@ export default function Profile() {
               <MyText style={styles.value}>{userProfile.currency}</MyText>
             </View>
           </View>
+        </View>
+        <View style={styles.bottomContainer}>
+          <ContinueButton
+            text="Sign Out"
+            onPress={() => {
+              // TODO: Add sign out logic
+            }}
+            customStyle={{
+              backgroundColor: useThemeColor(scheme, "negativeAmount")
+            }}
+          />
         </View>
       </View>
     </SafeAreaView>

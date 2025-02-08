@@ -1,11 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
+import { AuthContext } from "@/provider/auth";
 
 export type Transaction = {
   id: string;
   date: string;
   description: string;
   amount: number;
+  user_id: string;
 };
 
 type TransactionContextType = {
@@ -26,12 +28,16 @@ export function TransactionProvider({
   children: React.ReactNode;
 }) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const { userProfile } = useContext(AuthContext);
 
   const fetchTransactions = async () => {
     try {
+      if (!userProfile?.id) return;
+
       const { data, error } = await supabase
         .from("transactions")
         .select("*")
+        .eq("user_id", userProfile.id)
         .order("date", { ascending: false });
 
       if (error) throw error;
@@ -41,6 +47,7 @@ export function TransactionProvider({
         date: t.date,
         description: t.description,
         amount: t.amount,
+        user_id: t.user_id,
       }));
 
       setTransactions(formattedTransactions);
@@ -50,14 +57,22 @@ export function TransactionProvider({
   };
 
   useEffect(() => {
-    fetchTransactions();
-  }, []);
+    if (userProfile?.id) {
+      fetchTransactions();
+    }
+  }, [userProfile?.id]);
 
   const addTransaction = async (description: string, amount: number) => {
     try {
+      if (!userProfile?.id) return;
+
       const { data, error } = await supabase
         .from("transactions")
-        .insert([{ description, amount }])
+        .insert([{ 
+          description, 
+          amount,
+          user_id: userProfile.id 
+        }])
         .select()
         .single();
 
@@ -68,6 +83,7 @@ export function TransactionProvider({
         date: data.date,
         description: data.description,
         amount: data.amount,
+        user_id: data.user_id,
       };
 
       setTransactions((prev) => [newTransaction, ...prev]);
@@ -78,10 +94,12 @@ export function TransactionProvider({
 
   const clearTransactions = async () => {
     try {
+      if (!userProfile?.id) return;
+
       const { error } = await supabase
         .from("transactions")
         .delete()
-        .neq("id", "0");
+        .eq("user_id", userProfile.id);
 
       if (error) throw error;
       setTransactions([]);
@@ -92,10 +110,13 @@ export function TransactionProvider({
 
   const deleteTransaction = async (id: string) => {
     try {
+      if (!userProfile?.id) return;
+
       const { error } = await supabase
         .from("transactions")
         .delete()
-        .eq("id", id);
+        .eq("id", id)
+        .eq("user_id", userProfile.id);
 
       if (error) throw error;
 

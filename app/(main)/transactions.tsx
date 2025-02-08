@@ -185,7 +185,15 @@ export default function Transactions() {
           barStyle={colorScheme === "dark" ? "light-content" : "dark-content"}
         />
         <View style={activeStyles.container}>
-          <Header onIconPress={() => router.back()} iconName="close" />
+          <Header 
+            title="Transactions" 
+            rightIcons={[
+              {
+                name: "close",
+                onPress: () => router.back()
+              }
+            ]}
+          />
           {transactions.length > 0 ? (
             <FlatList
               data={transactions}

@@ -7,12 +7,14 @@ interface ContinueButtonProps {
   onPress: () => void;
   disabled?: boolean;
   text?: string;
+  customStyle?: object;
 }
 
 export default function ContinueButton({
   onPress,
   disabled = false,
   text = "Continue",
+  customStyle = {},
 }: ContinueButtonProps) {
   const colorScheme = useColorScheme();
   const scheme = colorScheme || "light";
@@ -39,7 +41,11 @@ export default function ContinueButton({
 
   return (
     <TouchableOpacity
-      style={[styles.continueButton, disabled && styles.continueButtonDisabled]}
+      style={[
+        styles.continueButton,
+        disabled && styles.continueButtonDisabled,
+        customStyle
+      ]}
       onPress={onPress}
       disabled={disabled}
     >
