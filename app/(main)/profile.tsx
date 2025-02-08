@@ -8,6 +8,7 @@ import { useContext } from "react";
 import { AuthContext } from "@/provider/auth";
 import Header from "@/components/header";
 import ContinueButton from "@/components/continue-button";
+import { supabase } from "@/lib/supabase";
 
 export default function Profile() {
   const colorScheme = useColorScheme();
@@ -62,7 +63,13 @@ export default function Profile() {
     },
     bottomContainer: {
       paddingHorizontal: 20,
-      paddingBottom: 20,
+      paddingBottom: 10,
+    },
+    developedBy: {
+      fontSize: 12,
+      textAlign: 'center',
+      color: useThemeColor(scheme, "secondaryText"),
+      marginTop: 12,
     },
   });
 
@@ -112,13 +119,17 @@ export default function Profile() {
         <View style={styles.bottomContainer}>
           <ContinueButton
             text="Sign Out"
-            onPress={() => {
-              // TODO: Add sign out logic
+            onPress={async () => {
+              const { error } = await supabase.auth.signOut();
+              if (error) {
+                console.error('Error signing out:', error);
+              }
             }}
             customStyle={{
               backgroundColor: useThemeColor(scheme, "negativeAmount")
             }}
           />
+           <MyText style={styles.developedBy}>Developed by <MyText style={{fontWeight: '700', fontSize: 12}}>Optiffy</MyText></MyText>
         </View>
       </View>
     </SafeAreaView>

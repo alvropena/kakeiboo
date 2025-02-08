@@ -104,7 +104,7 @@ export default function CurrencyScreen() {
   const [selectedCurrency, setSelectedCurrency] = useState('USD');
   const params = useLocalSearchParams();
   const [isUpdating, setIsUpdating] = useState(false);
-  const { session } = useContext(AuthContext);
+  const { session, refreshProfile } = useContext(AuthContext);
 
   const activeStyles = styles(scheme);
 
@@ -151,10 +151,12 @@ export default function CurrencyScreen() {
         .eq('id', session.user.id);
 
       if (error) throw error;
+      
+      await refreshProfile?.();
+      
       router.push('/');
     } catch (error) {
       console.error('Error updating profile:', error);
-      // You might want to show an error message
     } finally {
       setIsUpdating(false);
     }

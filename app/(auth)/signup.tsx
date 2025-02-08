@@ -155,82 +155,84 @@ export default function SignUpScreen() {
         barStyle={colorScheme === "dark" ? "light-content" : "dark-content"}
       />
       
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={activeStyles.container}
-      >
-        <View style={activeStyles.header}>
-          <MyText style={activeStyles.headerTitle}>Create Account</MyText>
-        </View>
-
-        <View style={activeStyles.content}>
-          <View style={activeStyles.inputGroup}>
-            <MyText style={activeStyles.label}>EMAIL</MyText>
-            <TextInput
-              style={activeStyles.input}
-              value={email}
-              onChangeText={setEmail}
-              placeholder="Enter your email"
-              placeholderTextColor={useThemeColor(scheme, "secondaryText")}
-              autoCapitalize="none"
-              autoComplete="email"
-              keyboardType="email-address"
-              autoCorrect={false}
-            />
+      <View style={activeStyles.container}>
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={{ flex: 1 }}
+        >
+          <View style={activeStyles.header}>
+            <MyText style={activeStyles.headerTitle}>Create Account</MyText>
           </View>
 
-          <View style={activeStyles.inputGroup}>
-            <MyText style={activeStyles.label}>PASSWORD</MyText>
-            <View style={activeStyles.passwordContainer}>
+          <View style={activeStyles.content}>
+            <View style={activeStyles.inputGroup}>
+              <MyText style={activeStyles.label}>EMAIL</MyText>
               <TextInput
-                style={activeStyles.passwordInput}
-                value={password}
-                onChangeText={setPassword}
-                placeholder="Enter your password"
+                style={activeStyles.input}
+                value={email}
+                onChangeText={setEmail}
+                placeholder="Enter your email"
                 placeholderTextColor={useThemeColor(scheme, "secondaryText")}
-                secureTextEntry={!showPassword}
                 autoCapitalize="none"
-                autoComplete="password"
+                autoComplete="email"
+                keyboardType="email-address"
+                autoCorrect={false}
               />
-              <TouchableOpacity
-                style={activeStyles.togglePassword}
-                onPress={() => setShowPassword(!showPassword)}
-              >
-                <Ionicons
-                  name={showPassword ? "eye-off" : "eye"}
-                  size={24}
-                  color={useThemeColor(scheme, "secondaryText")}
+            </View>
+
+            <View style={activeStyles.inputGroup}>
+              <MyText style={activeStyles.label}>PASSWORD</MyText>
+              <View style={activeStyles.passwordContainer}>
+                <TextInput
+                  style={activeStyles.passwordInput}
+                  value={password}
+                  onChangeText={setPassword}
+                  placeholder="Enter your password"
+                  placeholderTextColor={useThemeColor(scheme, "secondaryText")}
+                  secureTextEntry={!showPassword}
+                  autoCapitalize="none"
+                  autoComplete="password"
                 />
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={activeStyles.togglePassword}
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  <Ionicons
+                    name={showPassword ? "eye-off" : "eye"}
+                    size={24}
+                    color={useThemeColor(scheme, "secondaryText")}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={activeStyles.inputGroup}>
+              <MyText style={activeStyles.label}>CONFIRM PASSWORD</MyText>
+              <View style={activeStyles.passwordContainer}>
+                <TextInput
+                  style={activeStyles.passwordInput}
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                  placeholder="Confirm your password"
+                  placeholderTextColor={useThemeColor(scheme, "secondaryText")}
+                  secureTextEntry={!showConfirmPassword}
+                  autoCapitalize="none"
+                  autoComplete="password"
+                />
+                <TouchableOpacity
+                  style={activeStyles.togglePassword}
+                  onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  <Ionicons
+                    name={showConfirmPassword ? "eye-off" : "eye"}
+                    size={24}
+                    color={useThemeColor(scheme, "secondaryText")}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-
-          <View style={activeStyles.inputGroup}>
-            <MyText style={activeStyles.label}>CONFIRM PASSWORD</MyText>
-            <View style={activeStyles.passwordContainer}>
-              <TextInput
-                style={activeStyles.passwordInput}
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                placeholder="Confirm your password"
-                placeholderTextColor={useThemeColor(scheme, "secondaryText")}
-                secureTextEntry={!showConfirmPassword}
-                autoCapitalize="none"
-                autoComplete="password"
-              />
-              <TouchableOpacity
-                style={activeStyles.togglePassword}
-                onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-              >
-                <Ionicons
-                  name={showConfirmPassword ? "eye-off" : "eye"}
-                  size={24}
-                  color={useThemeColor(scheme, "secondaryText")}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
+        </KeyboardAvoidingView>
 
         <View style={activeStyles.bottomContainer}>
           {error && (
@@ -253,7 +255,7 @@ export default function SignUpScreen() {
             </TouchableOpacity>
           </View>
         </View>
-      </KeyboardAvoidingView>
+      </View>
     </SafeAreaView>
   );
 } 
