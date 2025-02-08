@@ -157,7 +157,7 @@ export default function Index() {
       />
       <View style={activeStyles.container}>
         <Header
-          onIconPress={() => router.push("/transactions")}
+          onIconPress={() => router.push("/gender")}
           iconName="time-outline"
         />
         <View style={activeStyles.mainContent}>

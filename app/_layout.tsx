@@ -24,6 +24,7 @@ export default function RootLayout() {
         <Stack.Screen name="index" />
         <Stack.Screen name="transactions" />
         <Stack.Screen name="description" />
+        <Stack.Screen name="currency" />
       </Stack>
     </TransactionProvider>
   );
