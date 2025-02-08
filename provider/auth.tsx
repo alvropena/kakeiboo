@@ -34,7 +34,6 @@ const AuthProvider = (props: Props) => {
 
 	const fetchUserProfile = async (userId: string) => {
 		try {
-			console.log('📥 Fetching user profile for:', userId);
 			const { data, error } = await supabase
 				.from('users')
 				.select('*')
@@ -42,39 +41,28 @@ const AuthProvider = (props: Props) => {
 				.single();
 
 			if (error) {
-				console.error('Error fetching user profile:', error);
 				return;
 			}
 
 			if (data) {
-				console.log('✅ Profile data received:', data);
 				setUserProfile(data);
 			} else {
-				console.log('⚠️ No profile data found');
 				setUserProfile(null);
 			}
 		} catch (error) {
-			console.error('Error in fetchUserProfile:', error);
 			setUserProfile(null);
 		}
 	};
 
 	const refreshProfile = async () => {
 		if (session?.user.id) {
-			console.log('🔄 Refreshing user profile...');
 			await fetchUserProfile(session.user.id);
-		} else {
-			console.log('⚠️ Cannot refresh profile - no session');
 		}
 	};
 
 	useEffect(() => {
 		// Initialize: check for existing session
 		supabase.auth.getSession().then(({ data: { session } }) => {
-			console.log('🔐 Initial session check:', {
-				hasSession: !!session,
-				userId: session?.user?.id
-			});
 			setSession(session);
 			setUser(session ? true : false);
 			if (session?.user.id) {
@@ -84,11 +72,6 @@ const AuthProvider = (props: Props) => {
 
 		// Listen for auth changes
 		const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-			console.log('🔄 Auth state change:', {
-				event,
-				hasSession: !!session,
-				userId: session?.user?.id
-			});
 			setSession(session);
 			setUser(session ? true : false);
 			
@@ -101,12 +84,6 @@ const AuthProvider = (props: Props) => {
 
 		return () => subscription.unsubscribe();
 	}, []);
-
-	console.log('🏃 Auth Provider State:', {
-		user,
-		hasSession: !!session,
-		hasProfile: !!userProfile
-	});
 
 	return (
 		<AuthContext.Provider

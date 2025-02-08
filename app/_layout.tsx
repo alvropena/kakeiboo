@@ -13,17 +13,7 @@ function RootLayoutNav() {
   const auth = useContext(AuthContext);
   const user = auth.user;
 
-  console.log('📱 RootLayoutNav:', {
-    user,
-    authContext: auth
-  });
-
   useEffect(() => {
-    console.log('🔀 Navigation Effect:', {
-      user,
-      isRedirecting: user === false ? 'to login' : user === true ? 'to home' : 'waiting'
-    });
-
     if (user === false) {
       router.replace("/login");
     } else if (user === true) {
@@ -33,7 +23,6 @@ function RootLayoutNav() {
 
   // Show nothing while checking authentication state
   if (user === null) {
-    console.log('⏳ Loading state - user is null');
     return null;
   }
 
