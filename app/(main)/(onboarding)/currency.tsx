@@ -14,7 +14,8 @@ import { currencies, Currency } from '@/constants/currencies';
 import ContinueButton from '@/components/continue-button';
 import { useColorScheme } from 'react-native';
 import { useThemeColor } from '@/constants/theme';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
+import { supabase } from "@/lib/supabase";
 
 const styles = (scheme: "light" | "dark") => StyleSheet.create({
   container: {
@@ -100,6 +101,8 @@ export default function CurrencyScreen() {
   const scheme = colorScheme || 'light';
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCurrency, setSelectedCurrency] = useState('USD');
+  const params = useLocalSearchParams();
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const activeStyles = styles(scheme);
 
@@ -125,6 +128,30 @@ export default function CurrencyScreen() {
       )}
     </TouchableOpacity>
   );
+
+  const updateUserProfile = async (currency: string) => {
+    setIsUpdating(true);
+    try {
+      const { error } = await supabase
+        .from('users')
+        .update({
+          name: params.name as string,
+          birthday: params.birthday as string,
+          gender: params.gender as string,
+          currency: currency,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', (await supabase.auth.getUser()).data.user?.id);
+
+      if (error) throw error;
+      router.push('/');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      // You might want to show an error message
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
   return (
     <SafeAreaView style={activeStyles.container}>
@@ -160,11 +187,9 @@ export default function CurrencyScreen() {
 
       <View style={activeStyles.bottomContainer}>
         <ContinueButton
-          onPress={() => router.push({
-            pathname: '/transactions',
-            params: { currency: selectedCurrency }
-          })}
-          text="Continue"
+          onPress={() => updateUserProfile(selectedCurrency)}
+          disabled={isUpdating}
+          text={isUpdating ? "Updating..." : "Let's go! 🚀"}
         />
       </View>
     </SafeAreaView>

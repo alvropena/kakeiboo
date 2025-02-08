@@ -15,6 +15,7 @@ import { router } from "expo-router";
 import { useThemeColor } from "@/constants/theme";
 import ContinueButton from "@/components/continue-button";
 import MyText from "@/components/my-text";
+import { supabase } from "@/lib/supabase";
 
 const styles = (scheme: "light" | "dark") =>
   StyleSheet.create({
@@ -100,6 +101,8 @@ export default function SignUpScreen() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const activeStyles = styles(scheme);
 
@@ -117,6 +120,33 @@ export default function SignUpScreen() {
 
   const isValid = () => {
     return isValidEmail(email) && isValidPassword(password) && passwordsMatch();
+  };
+
+  const handleSignUp = async () => {
+    if (!isValid()) return;
+    
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: "",
+        },
+      });
+
+      if (error) throw error;
+
+      if (data) {
+        router.push("/name");
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred during sign up");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -203,15 +233,15 @@ export default function SignUpScreen() {
         </View>
 
         <View style={activeStyles.bottomContainer}>
+          {error && (
+            <MyText style={{ color: "red", marginBottom: 10, textAlign: "center" }}>
+              {error}
+            </MyText>
+          )}
           <ContinueButton
-            onPress={() => {
-              if (isValid()) {
-                // Handle sign up logic here
-                router.push("/gender");
-              }
-            }}
-            disabled={!isValid()}
-            text="Sign Up"
+            onPress={handleSignUp}
+            disabled={!isValid() || loading}
+            text={loading ? "Creating Account..." : "Sign Up"}
           />
           
           <View style={activeStyles.loginPrompt}>

@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useThemeColor } from "@/constants/theme";
 import ContinueButton from "@/components/continue-button";
 import MyText from "@/components/my-text";
@@ -95,6 +95,7 @@ export default function GenderScreen() {
   const scheme = colorScheme || "light";
   const [selectedGender, setSelectedGender] = useState<Gender | null>(null);
   const [otherGender, setOtherGender] = useState("");
+  const params = useLocalSearchParams();
 
   const activeStyles = styles(scheme);
 
@@ -167,8 +168,10 @@ export default function GenderScreen() {
             onPress={() => {
               if (isValid()) {
                 router.push({
-                  pathname: "/birthday",
+                  pathname: "/currency",
                   params: { 
+                    name: params.name,
+                    birthday: params.birthday,
                     gender: selectedGender === "other" ? otherGender : selectedGender 
                   },
                 });

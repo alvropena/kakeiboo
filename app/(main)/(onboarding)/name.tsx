@@ -103,7 +103,7 @@ export default function NameScreen() {
             onPress={() => {
               if (name.trim()) {
                 router.push({
-                  pathname: "/currency",
+                  pathname: "/birthday",
                   params: { name: name.trim() },
                 });
               }

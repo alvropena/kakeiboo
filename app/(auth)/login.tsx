@@ -15,6 +15,7 @@ import { router } from "expo-router";
 import { useThemeColor } from "@/constants/theme";
 import ContinueButton from "@/components/continue-button";
 import MyText from "@/components/my-text";
+import { supabase } from "@/lib/supabase";
 
 const styles = (scheme: "light" | "dark") =>
   StyleSheet.create({
@@ -106,6 +107,8 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const activeStyles = styles(scheme);
 
@@ -115,6 +118,30 @@ export default function LoginScreen() {
 
   const isValid = () => {
     return isValidEmail(email) && password.length > 0;
+  };
+
+  const handleLogin = async () => {
+    if (!isValid()) return;
+    
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) throw error;
+
+      if (data.user) {
+        router.push("/");
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Invalid email or password");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -183,15 +210,15 @@ export default function LoginScreen() {
         </View>
 
         <View style={activeStyles.bottomContainer}>
+          {error && (
+            <MyText style={{ color: "red", marginBottom: 10, textAlign: "center" }}>
+              {error}
+            </MyText>
+          )}
           <ContinueButton
-            onPress={() => {
-              if (isValid()) {
-                // Handle login logic here
-                router.push("/");
-              }
-            }}
-            disabled={!isValid()}
-            text="Log In"
+            onPress={handleLogin}
+            disabled={!isValid() || loading}
+            text={loading ? "Logging in..." : "Log In"}
           />
           
           <View style={activeStyles.signupPrompt}>

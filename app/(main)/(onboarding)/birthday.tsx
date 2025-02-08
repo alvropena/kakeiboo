@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useThemeColor } from "@/constants/theme";
 import ContinueButton from "@/components/continue-button";
 import MyText from "@/components/my-text";
@@ -70,6 +70,7 @@ export default function BirthdayScreen() {
   const scheme = colorScheme || "light";
   const [date, setDate] = useState(new Date(2000, 0, 1));
   const [showPicker, setShowPicker] = useState(Platform.OS === 'ios');
+  const params = useLocalSearchParams();
 
   const activeStyles = styles(scheme);
 
@@ -154,8 +155,11 @@ export default function BirthdayScreen() {
             onPress={() => {
               if (isValidAge()) {
                 router.push({
-                  pathname: "/name",
-                  params: { birthday: date.toISOString() },
+                  pathname: "/gender",
+                  params: { 
+                    name: params.name,
+                    birthday: date.toISOString() 
+                  },
                 });
               }
             }}
