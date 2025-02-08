@@ -21,7 +21,7 @@ function RootLayoutNav() {
     if (user == true) {
       router.push("/");
     }
-  }, []);
+  }, [user]);
 
   return (
     <Stack
