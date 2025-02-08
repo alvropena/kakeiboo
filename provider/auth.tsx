@@ -58,7 +58,11 @@ const AuthProvider = (props: Props) => {
 	useEffect(() => {
 		// Initialize: check for existing session
 		supabase.auth.getSession().then(({ data: { session } }) => {
-			console.log('Initial session check:', session ? 'Session exists' : 'No session');
+			console.log('🔐 Initial session check:', {
+				hasSession: !!session,
+				sessionData: session,
+				userId: session?.user?.id
+			});
 			setSession(session);
 			setUser(session ? true : false);
 			if (session?.user.id) {
@@ -68,7 +72,11 @@ const AuthProvider = (props: Props) => {
 
 		// Listen for auth changes
 		const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-			console.log('Auth state change:', event, session ? 'Session exists' : 'No session');
+			console.log('🔄 Auth state change:', {
+				event,
+				hasSession: !!session,
+				userId: session?.user?.id
+			});
 			setSession(session);
 			setUser(session ? true : false);
 			
@@ -79,10 +87,14 @@ const AuthProvider = (props: Props) => {
 			}
 		});
 
-		return () => {
-			subscription.unsubscribe();
-		};
+		return () => subscription.unsubscribe();
 	}, []);
+
+	console.log('🏃 Auth Provider State:', {
+		user,
+		hasSession: !!session,
+		hasProfile: !!userProfile
+	});
 
 	return (
 		<AuthContext.Provider

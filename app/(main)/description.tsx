@@ -64,7 +64,15 @@ export default function Description() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={activeStyles.container}
       >
-        <Header onIconPress={() => router.back()} iconName="close-outline" />
+        <Header 
+          title="Description" 
+          rightIcons={[
+            {
+              name: "close-outline",
+              onPress: () => router.back(),
+            },
+          ]}
+        />
 
         <View style={activeStyles.mainContent}>
           <TextInput
