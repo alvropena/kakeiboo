@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { 
   View, 
   Text, 
@@ -16,6 +16,7 @@ import { useColorScheme } from 'react-native';
 import { useThemeColor } from '@/constants/theme';
 import { router, useLocalSearchParams } from 'expo-router';
 import { supabase } from "@/lib/supabase";
+import { AuthContext } from "@/provider/auth";
 
 const styles = (scheme: "light" | "dark") => StyleSheet.create({
   container: {
@@ -103,6 +104,7 @@ export default function CurrencyScreen() {
   const [selectedCurrency, setSelectedCurrency] = useState('USD');
   const params = useLocalSearchParams();
   const [isUpdating, setIsUpdating] = useState(false);
+  const { session } = useContext(AuthContext);
 
   const activeStyles = styles(scheme);
 
@@ -130,6 +132,11 @@ export default function CurrencyScreen() {
   );
 
   const updateUserProfile = async (currency: string) => {
+    if (!session?.user) {
+      console.error('No authenticated user found');
+      return;
+    }
+
     setIsUpdating(true);
     try {
       const { error } = await supabase
@@ -141,7 +148,7 @@ export default function CurrencyScreen() {
           currency: currency,
           updated_at: new Date().toISOString()
         })
-        .eq('id', (await supabase.auth.getUser()).data.user?.id);
+        .eq('id', session.user.id);
 
       if (error) throw error;
       router.push('/');

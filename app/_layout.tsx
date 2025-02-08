@@ -14,14 +14,20 @@ function RootLayoutNav() {
   const user = auth.user;
 
   useEffect(() => {
-    if (user == null) {
-      router.push("/login");
-    }
-
-    if (user == true) {
-      router.push("/");
+    // Only redirect if we're sure of the authentication state
+    // user === false means we're sure the user is not authenticated
+    // user === null means we're still checking
+    if (user === false) {
+      router.replace("/login");
+    } else if (user === true) {
+      router.replace("/");
     }
   }, [user]);
+
+  // Show nothing while checking authentication state
+  if (user === null) {
+    return null;
+  }
 
   return (
     <Stack

@@ -226,6 +226,19 @@ import {
                 </TouchableOpacity>
                 {renderButton("0")}
                 <TouchableOpacity
+                  style={[
+                    activeStyles.button,
+                    { backgroundColor: useThemeColor(scheme, "buttonBackground") },
+                  ]}
+                  onPress={() => router.push("/profile")}
+                >
+                  <Ionicons 
+                    name="person-outline" 
+                    size={32} 
+                    color={useThemeColor(scheme, "buttonText")} 
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
                   style={[activeStyles.button, activeStyles.deleteButton]}
                   onPress={handleDelete}
                 >
