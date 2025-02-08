@@ -10,10 +10,10 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { router } from "expo-router";
-import Header from "../components/header";
-import { useTransactions } from "../context/transaction";
+import Header from "@/components/header";
+import { useTransactions } from "@/context/transaction";
 import { Transaction } from "@/context/transaction";
-import { useThemeColor } from "../constants/theme";
+import { useThemeColor } from "@/constants/theme";
 import { useState, useCallback } from "react";
 import MyText from "@/components/my-text";
 import {

@@ -12,9 +12,9 @@ import {
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { useThemeColor } from "../constants/theme";
-import ContinueButton from "../components/continue-button";
-import MyText from "../components/my-text";
+import { useThemeColor } from "@/constants/theme";
+import ContinueButton from "@/components/continue-button";
+import MyText from "@/components/my-text";
 
 const styles = (scheme: "light" | "dark") =>
   StyleSheet.create({
@@ -75,24 +75,32 @@ const styles = (scheme: "light" | "dark") =>
       paddingHorizontal: 20,
       paddingBottom: 20,
     },
-    loginPrompt: {
+    forgotPassword: {
+      alignItems: "flex-end",
+      marginTop: 8,
+    },
+    forgotPasswordText: {
+      color: useThemeColor(scheme, "primary"),
+      fontSize: 16,
+    },
+    signupPrompt: {
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
       paddingVertical: 16,
     },
-    loginText: {
+    signupText: {
       color: useThemeColor(scheme, "secondaryText"),
       fontSize: 16,
     },
-    loginLink: {
+    signupLink: {
       color: useThemeColor(scheme, "primary"),
       fontSize: 16,
       marginLeft: 4,
     },
   });
 
-export default function SignUpScreen() {
+export default function LoginScreen() {
   const colorScheme = useColorScheme();
   const scheme = colorScheme || "light";
   const [email, setEmail] = useState("");
@@ -105,12 +113,8 @@ export default function SignUpScreen() {
     return /\S+@\S+\.\S+/.test(email);
   };
 
-  const isValidPassword = (password: string) => {
-    return password.length >= 8;
-  };
-
   const isValid = () => {
-    return isValidEmail(email) && isValidPassword(password);
+    return isValidEmail(email) && password.length > 0;
   };
 
   return (
@@ -124,17 +128,7 @@ export default function SignUpScreen() {
         style={activeStyles.container}
       >
         <View style={activeStyles.header}>
-          <TouchableOpacity
-            onPress={() => router.back()}
-            style={activeStyles.backButton}
-          >
-            <Ionicons
-              name="arrow-back"
-              size={24}
-              color={useThemeColor(scheme, "text")}
-            />
-          </TouchableOpacity>
-          <MyText style={activeStyles.headerTitle}>Create Account</MyText>
+          <MyText style={activeStyles.headerTitle}>Welcome Back</MyText>
         </View>
 
         <View style={activeStyles.content}>
@@ -177,6 +171,14 @@ export default function SignUpScreen() {
                 />
               </TouchableOpacity>
             </View>
+            <TouchableOpacity 
+              style={activeStyles.forgotPassword}
+            //   onPress={() => router.push("/forgot-password")}
+            >
+              <MyText style={activeStyles.forgotPasswordText}>
+                Forgot Password?
+              </MyText>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -184,20 +186,20 @@ export default function SignUpScreen() {
           <ContinueButton
             onPress={() => {
               if (isValid()) {
-                // Handle sign up logic here
-                router.push("/gender");
+                // Handle login logic here
+                router.push("/");
               }
             }}
             disabled={!isValid()}
-            text="Sign Up"
+            text="Log In"
           />
           
-          <View style={activeStyles.loginPrompt}>
-            <MyText style={activeStyles.loginText}>
-              Already have an account?
+          <View style={activeStyles.signupPrompt}>
+            <MyText style={activeStyles.signupText}>
+              Don't have an account?
             </MyText>
-            <TouchableOpacity onPress={() => router.push("/login")}>
-              <MyText style={activeStyles.loginLink}>Log In</MyText>
+            <TouchableOpacity onPress={() => router.push("/signup")}>
+              <MyText style={activeStyles.signupLink}>Sign Up</MyText>
             </TouchableOpacity>
           </View>
         </View>

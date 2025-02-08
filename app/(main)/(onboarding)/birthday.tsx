@@ -9,9 +9,9 @@ import {
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { useThemeColor } from "../constants/theme";
-import ContinueButton from "../components/continue-button";
-import MyText from "../components/my-text";
+import { useThemeColor } from "@/constants/theme";
+import ContinueButton from "@/components/continue-button";
+import MyText from "@/components/my-text";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Platform } from "react-native";
 

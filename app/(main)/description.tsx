@@ -12,11 +12,11 @@ import {
 } from "react-native";
 import { useState, useEffect } from "react";
 import { router, useLocalSearchParams } from "expo-router";
-import Header from "../components/header";
-import ContinueButton from "../components/continue-button";
-import { useTransactions } from "../context/transaction";
-import { useThemeColor } from "../constants/theme";
-import MyText from "../components/my-text";
+import Header from "@/components/header";
+import ContinueButton from "@/components/continue-button";
+import { useTransactions } from "@/context/transaction";
+import { useThemeColor } from "@/constants/theme";
+import MyText from "@/components/my-text";
 export default function Description() {
   const { amount } = useLocalSearchParams();
   const MAX_CHARS = 60;

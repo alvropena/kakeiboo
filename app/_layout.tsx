@@ -1,31 +1,53 @@
-import { Stack } from "expo-router";
+import React from "react";
+import { router, Stack } from "expo-router";
 import { useColorScheme } from "react-native";
 import { TransactionProvider } from "../context/transaction";
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect } from "react";
+import { AuthProvider } from "@/provider/auth";
+import { useContext } from "react";
+import { AuthContext } from "@/provider/auth";
+
+function RootLayoutNav() {
+  const colorScheme = useColorScheme();
+  const auth = useContext(AuthContext);
+  const user = auth.user;
+
+  useEffect(() => {
+    if (user == null) {
+      router.push("/login");
+    }
+
+    if (user == true) {
+      router.push("/");
+    }
+  }, []);
+
+  return (
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        contentStyle: {
+          backgroundColor: colorScheme === "dark" ? "#000" : "#fff",
+        },
+      }}
+    >
+      <Stack.Screen name="(main)" />
+      <Stack.Screen name="(auth)" />
+    </Stack>
+  );
+}
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
   useEffect(() => {
     SplashScreen.hideAsync();
   }, []);
 
   return (
-    <TransactionProvider>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: {
-            backgroundColor: colorScheme === "dark" ? "#000" : "#fff",
-          },
-        }}
-      >
-        <Stack.Screen name="index" />
-        <Stack.Screen name="transactions" />
-        <Stack.Screen name="description" />
-        <Stack.Screen name="currency" />
-      </Stack>
-    </TransactionProvider>
+    <AuthProvider>
+      <TransactionProvider>
+        <RootLayoutNav />
+      </TransactionProvider>
+    </AuthProvider>
   );
 }

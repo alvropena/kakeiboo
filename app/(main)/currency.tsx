@@ -10,10 +10,10 @@ import {
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
-import { currencies, Currency } from '../constants/currencies';
-import ContinueButton from '../components/continue-button';
+import { currencies, Currency } from '@/constants/currencies';
+import ContinueButton from '@/components/continue-button';
 import { useColorScheme } from 'react-native';
-import { useThemeColor } from '../constants/theme';
+import { useThemeColor } from '@/constants/theme';
 import { router } from 'expo-router';
 
 const styles = (scheme: "light" | "dark") => StyleSheet.create({

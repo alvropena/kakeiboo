@@ -10,9 +10,9 @@ import {
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { useThemeColor } from "../constants/theme";
-import ContinueButton from "../components/continue-button";
-import MyText from "../components/my-text";
+import { useThemeColor } from "@/constants/theme";
+import ContinueButton from "@/components/continue-button";
+import MyText from "@/components/my-text";
 
 const styles = (scheme: "light" | "dark") =>
   StyleSheet.create({

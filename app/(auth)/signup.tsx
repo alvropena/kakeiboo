@@ -12,9 +12,9 @@ import {
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { useThemeColor } from "../constants/theme";
-import ContinueButton from "../components/continue-button";
-import MyText from "../components/my-text";
+import { useThemeColor } from "@/constants/theme";
+import ContinueButton from "@/components/continue-button";
+import MyText from "@/components/my-text";
 
 const styles = (scheme: "light" | "dark") =>
   StyleSheet.create({
@@ -75,37 +75,31 @@ const styles = (scheme: "light" | "dark") =>
       paddingHorizontal: 20,
       paddingBottom: 20,
     },
-    forgotPassword: {
-      alignItems: "flex-end",
-      marginTop: 8,
-    },
-    forgotPasswordText: {
-      color: useThemeColor(scheme, "primary"),
-      fontSize: 16,
-    },
-    signupPrompt: {
+    loginPrompt: {
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
       paddingVertical: 16,
     },
-    signupText: {
+    loginText: {
       color: useThemeColor(scheme, "secondaryText"),
       fontSize: 16,
     },
-    signupLink: {
+    loginLink: {
       color: useThemeColor(scheme, "primary"),
       fontSize: 16,
       marginLeft: 4,
     },
   });
 
-export default function LoginScreen() {
+export default function SignUpScreen() {
   const colorScheme = useColorScheme();
   const scheme = colorScheme || "light";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const activeStyles = styles(scheme);
 
@@ -113,8 +107,16 @@ export default function LoginScreen() {
     return /\S+@\S+\.\S+/.test(email);
   };
 
+  const isValidPassword = (password: string) => {
+    return password.length >= 8;
+  };
+
+  const passwordsMatch = () => {
+    return password === confirmPassword;
+  };
+
   const isValid = () => {
-    return isValidEmail(email) && password.length > 0;
+    return isValidEmail(email) && isValidPassword(password) && passwordsMatch();
   };
 
   return (
@@ -128,17 +130,7 @@ export default function LoginScreen() {
         style={activeStyles.container}
       >
         <View style={activeStyles.header}>
-          <TouchableOpacity
-            onPress={() => router.back()}
-            style={activeStyles.backButton}
-          >
-            <Ionicons
-              name="arrow-back"
-              size={24}
-              color={useThemeColor(scheme, "text")}
-            />
-          </TouchableOpacity>
-          <MyText style={activeStyles.headerTitle}>Welcome Back</MyText>
+          <MyText style={activeStyles.headerTitle}>Create Account</MyText>
         </View>
 
         <View style={activeStyles.content}>
@@ -181,14 +173,32 @@ export default function LoginScreen() {
                 />
               </TouchableOpacity>
             </View>
-            <TouchableOpacity 
-              style={activeStyles.forgotPassword}
-            //   onPress={() => router.push("/forgot-password")}
-            >
-              <MyText style={activeStyles.forgotPasswordText}>
-                Forgot Password?
-              </MyText>
-            </TouchableOpacity>
+          </View>
+
+          <View style={activeStyles.inputGroup}>
+            <MyText style={activeStyles.label}>CONFIRM PASSWORD</MyText>
+            <View style={activeStyles.passwordContainer}>
+              <TextInput
+                style={activeStyles.passwordInput}
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                placeholder="Confirm your password"
+                placeholderTextColor={useThemeColor(scheme, "secondaryText")}
+                secureTextEntry={!showConfirmPassword}
+                autoCapitalize="none"
+                autoComplete="password"
+              />
+              <TouchableOpacity
+                style={activeStyles.togglePassword}
+                onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                <Ionicons
+                  name={showConfirmPassword ? "eye-off" : "eye"}
+                  size={24}
+                  color={useThemeColor(scheme, "secondaryText")}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
 
@@ -196,20 +206,20 @@ export default function LoginScreen() {
           <ContinueButton
             onPress={() => {
               if (isValid()) {
-                // Handle login logic here
-                router.push("/");
+                // Handle sign up logic here
+                router.push("/gender");
               }
             }}
             disabled={!isValid()}
-            text="Log In"
+            text="Sign Up"
           />
           
-          <View style={activeStyles.signupPrompt}>
-            <MyText style={activeStyles.signupText}>
-              Don't have an account?
+          <View style={activeStyles.loginPrompt}>
+            <MyText style={activeStyles.loginText}>
+              Already have an account?
             </MyText>
-            <TouchableOpacity onPress={() => router.push("/signup")}>
-              <MyText style={activeStyles.signupLink}>Sign Up</MyText>
+            <TouchableOpacity onPress={() => router.push("/login")}>
+              <MyText style={activeStyles.loginLink}>Log In</MyText>
             </TouchableOpacity>
           </View>
         </View>

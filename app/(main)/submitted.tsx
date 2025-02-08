@@ -8,8 +8,8 @@ import {
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import ContinueButton from "../components/continue-button";
-import { useThemeColor } from "../constants/theme";
+import ContinueButton from "@/components/continue-button";
+import { useThemeColor } from "@/constants/theme";
 import MyText from "@/components/my-text";
 
 const styles = (scheme: "light" | "dark") =>
